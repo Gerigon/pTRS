@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 	void Start () 
     {
 		int hi;
+		float hello;
 	}
 	
 	// Update is called once per frame
