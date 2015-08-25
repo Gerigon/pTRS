@@ -4,30 +4,24 @@ using System.Collections;
 public class Actor : MonoBehaviour {
 
     public bool selected;
-	// Use this for initialization
+
+    private Rect temp = new Rect(0, 0, 0, 0);
+    private bool selectedByClick;
+
+
 	void Start ()
     {
 	
 	}
-	
-	// Update is called once per frame
 	void Update ()
     {
         if (Input.GetMouseButton(0))
         {
-            Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
-            camPos.y = GameManager.InvertRectY(camPos.y);
-            Debug.Log("Width: " + GameManager.selection.width);
-            Debug.Log("height: " + GameManager.selection.height);
-            if (GameManager.selection.width > 0 && GameManager.selection.height > 0)
+            if (!selectedByClick)
             {
+                Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
+                camPos.y = GameManager.InvertRectY(camPos.y);
                 selected = GameManager.selection.Contains(camPos);
-            }
-            else if(GameManager.selection.width > 0 && GameManager.selection.height < 0)
-            {
-                Debug.Log("linksonderin");
-                Debug.Log(GameManager.InvertRectY(Input.mousePosition.y) + GameManager.selection.height);
-                selected = new Rect(Input.mousePosition.x, GameManager.InvertRectY(Input.mousePosition.y) + GameManager.selection.height, GameManager.selection.width, GameManager.selection.height).Contains(camPos);
             }
         }
 
@@ -39,5 +33,18 @@ public class Actor : MonoBehaviour {
         {
             GetComponent<Renderer>().material.color = Color.white;
         }
+    }
+
+    private void OnMouseDown()
+    {
+        selectedByClick = true;
+        selected = true;
+    }
+    private void OnMouseUp()
+    {
+        if (selectedByClick)
+            selected = true;
+
+        selectedByClick = false;
     }
 }

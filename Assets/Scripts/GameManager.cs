@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public Texture2D selectionColor;
     public static Rect selection = new Rect(0, 0, 0, 0);
-    private Vector3 startClick = -Vector3.one;
+    public static Vector3 startClick = -Vector3.one;
 
     public Player[] players = new Player[1];
 
@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
 	void Update () 
     {
         InputManager();
-        //Debug.Log(startClick);
 
     }
     void InputManager()
@@ -30,6 +29,12 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            startClick = -Vector3.one;
+        }
+        if (Input.GetMouseButton(0))
+        {
+            selection = new Rect(startClick.x, InvertRectY(startClick.y), Input.mousePosition.x - startClick.x, InvertRectY(Input.mousePosition.y) - InvertRectY(startClick.y));
+
             if (selection.width < 0)
             {
                 Debug.Log("lower width");
@@ -42,11 +47,6 @@ public class GameManager : MonoBehaviour
                 selection.y += selection.height;
                 selection.height = -selection.height;
             }
-            startClick = -Vector3.one;
-        }
-        if (Input.GetMouseButton(0))
-        {
-            selection = new Rect(startClick.x, InvertRectY(startClick.y), Input.mousePosition.x - startClick.x, InvertRectY(Input.mousePosition.y) - InvertRectY(startClick.y));
         }
     }
     public static float InvertRectY(float y)
